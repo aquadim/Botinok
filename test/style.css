@@ -1,0 +1,171 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Lato";
+    color: #ccc;
+}
+
+/* Список сообщений */
+#msgList {
+    position: absolute;
+    top: 0;
+    bottom: 64px;
+    width: 100%;
+    overflow-y: scroll;
+    background: #28272c;
+    background-size: cover;
+}
+
+/* Контейнер сообщения */
+.message-container {
+    width: 100%;
+    padding: 1em 0;
+}
+.message-container:target {
+    background-color: #4D4B40;
+}
+.message-container a {
+    /* Ссылки */
+    font-weight: bold;
+    color: white;
+    text-decoration: underline;
+}
+
+/* Карточки информации (встраиваются в контейнер сообщения) */
+.card {
+    max-width: 800px;
+    background-color: #4B4B4B;
+    border-radius: 5px;
+    border: 1px solid #FFFFFF;
+    margin: 0 auto;
+    padding: 0.5em;
+}
+.card.error pre {
+    /* Стек ошибки */
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+.card .title {
+    /* Заголовок карточки */
+    font-weight: bold;
+    font-size: 16pt;
+}
+
+/* Сообщение от пользователя */
+.message {
+    min-width: 25%;
+    max-width: 50%;
+    background-color: #223C4B;
+    border-radius: 0 5px 5px 0;
+    padding: 0.5em;
+    border: 1px solid #00A2FF;
+    font-size: 12pt;
+}
+.message.from-bot {
+    /* Сообщение от бота */
+    margin-right: 0;
+    margin-left: auto;
+    border-radius: 5px 0px 0px 5px;
+    background-color: #4B3C22;
+    border-color: #FFA200;
+}
+.message-info {
+    /* Метаданные сообщения */
+    font-size: 11pt;
+    font-style: italic;
+}
+
+/* Элементы управления */
+#msgControls {
+    width: 100%;
+    height: 64px;
+    position: fixed;
+    bottom: 0;
+    border-top: 1px solid #808080;
+    background-color: #252525;
+    display: flex;
+    align-items: center;
+}
+#messageBox {
+    display: grid;
+    grid-template-columns: 80% auto;
+    grid-gap: 1em;
+    padding: 0 1em;
+    padding-top: 0.5em;
+    width: 100%;
+}
+
+/* Кнопки */
+.btn {
+    background-color: #333;
+    border: 1px solid #404040;
+    padding: 0.5em;
+    color: #ccc;
+    font-size: 1rem;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0.1em;
+    font-size: 12pt;
+    cursor: pointer;
+    font-family: "Lato";
+}
+.btn:hover {
+    background-color: #4D4D4D;
+}
+.btn:active,
+.btn:focus,
+.btn.selected {
+    background-color: #252525;
+}
+
+/* Поле ввода */
+.inp {
+    padding: 0.5em;
+    margin: 0.1em 0;
+    width: 100%;
+    background-color: #333;
+    color: #ccc;
+    outline: none;
+    border-radius: 5px;
+    font-size: 12pt;
+    border: 1px solid transparent;
+    font-family: "Lato";
+}
+
+.inp:hover,
+.inp:focus {
+    border-color: #4d4d4d;
+}
+
+.inp:focus {
+    color: #ddd;
+}
+
+/* Ошибка */
+.error {
+    border-color: #FF000C;
+    background-color: #4B2224;
+}
+/* Предупреждение */
+.warning {
+    border-color: #FF8E00;
+    background-color: #4B3922;
+}
+/* Успех */
+.success,
+.success:focus {
+    border-color: #00FF0C;
+    background-color: #224B24;
+}
+.success:hover {
+    background-color: #366339;
+}
