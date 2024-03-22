@@ -32,14 +32,15 @@ function proxySend(type, details) {
 }
 
 // Добавление сообщения-информации в список сообщений
-function addInfo(title, text) {
+function addInfo(title, text, bodyElement = 'p') {
     const container = getContainer();
     const card = getCard();
 
     // Создание текста с информацией
     const header = getParagraph(title);
     header.classList.add('title');
-    const body = getParagraph(text);
+    const body = document.createElement(bodyElement);
+    body.innerHTML = text;
 
     // DOM
     card.append(header);
@@ -169,6 +170,8 @@ function processMessage(response) {
                 action.error.msg,
                 false
             );
+        } else if (action.action == 'varDump') {
+            addInfo("Содержимое для "+action.title, action.info, 'pre');
         }
     }
 }
