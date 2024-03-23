@@ -1,3 +1,14 @@
+// избежание HTML символов
+// http://stackoverflow.com/questions/6234773/ddg#6234804
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+ }
+
 // Создание контейнера
 function getContainer(withID=false) {
     const container = document.createElement("div");
@@ -18,7 +29,7 @@ function getCard() {
 // Создание параграфа с текстом
 function getParagraph(text) {
     const p = document.createElement("p");
-    p.innerHTML = text;
+    p.innerHTML = escapeHtml(text);
     return p;
 }
 
@@ -40,7 +51,7 @@ function addInfo(title, text, bodyElement = 'p') {
     const header = getParagraph(title);
     header.classList.add('title');
     const body = document.createElement(bodyElement);
-    body.innerHTML = text;
+    body.innerHTML = escapeHtml(text);
 
     // DOM
     card.append(header);
@@ -128,11 +139,11 @@ function addError(line, file, trace, msg, isError) {
     opener.href="#";
     opener.dataset.file = file;
     opener.dataset.line = line;
-    opener.innerHTML = file+":"+line;
+    opener.innerHTML = escapeHtml(file+":"+line);
 
     // Создание отчёта
     const report = document.createElement("pre");
-    report.innerHTML = trace;
+    report.innerHTML = escapeHtml(trace);
 
     // DOM
     card.append(header);
