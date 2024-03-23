@@ -172,6 +172,10 @@ function processMessage(response) {
             );
         } else if (action.action == 'varDump') {
             addInfo("Содержимое для "+action.title, action.info, 'pre');
+        } else if (action.action == 'info') {
+            addInfo(action.title, action.body, 'p');
+        } else {
+            addInfo("Получено неизвестное действие", action.action, 'p');
         }
     }
 }

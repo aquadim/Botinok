@@ -43,7 +43,18 @@ server.on('connection', function(conn) {
         });
 
         const botKitResponse = await response.text();
-        console.log('from botkit: ' + botKitResponse);
+
+        if (!botKitResponse) {
+            // BotKit ничего не вернул -- наверняка из-за ошибки парсинга
+            const errorMsg = [{
+                action: 'info',
+                title: 'Произошла неизвестная ошибка',
+                body: 'Проверьте корректность синтаксиса в BotKit и убедитесь в его работоспособности'
+            }];
+            conn.send(JSON.stringify(errorMsg));
+            return;
+        }
+        
         conn.send(botKitResponse);
     });
 

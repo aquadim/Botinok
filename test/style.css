@@ -23,7 +23,7 @@ body {
 /* Контейнер сообщения */
 .message-container {
     width: 100%;
-    padding: 1em 0;
+    padding: 0.5em 0;
 }
 .message-container:target {
     background-color: #4D4B40;
