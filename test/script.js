@@ -62,7 +62,7 @@ function addInfo(title, text, bodyElement = 'p') {
 }
 
 // Добавление сообщения
-function addMessage(text, fromBot, replyTo) {
+function addMessage(text, fromBot, replyTo, attachments) {
     const container = getContainer(true);
     
     // Создание сообщения
@@ -71,8 +71,6 @@ function addMessage(text, fromBot, replyTo) {
     if (fromBot) {
         msg.classList.add('from-bot');
     }
-
-    // Метаданные
 
     // id сообщения
     let p = getParagraph("#"+latestMsgId);
@@ -92,8 +90,75 @@ function addMessage(text, fromBot, replyTo) {
         msg.append(p);
     }
 
+    // Текст
     const textParagraph = getParagraph(text);
     msg.append(textParagraph);
+
+    // Вложения
+    const keyboards = [];
+    const images = [];
+    
+    for (let attachment in attachments) {
+        const item = attachments[attachment];
+        switch (item.type) {
+            case 'inlineKeyboard':
+                // Встраиваемая клавиатура
+
+                const keyboardDom = document.createElement('div');
+                keyboardDom.classList.add('inline-keyboard');
+
+                for (let rowIndex in item.layout) {
+                    const rowObj = item.layout[rowIndex];
+                    const rowDom = document.createElement("div");
+                    rowDom.classList.add('inline-keyboard-row');
+                    
+                    for (let buttonIndex in rowObj) {
+                        const buttonObj = rowObj[buttonIndex];
+                        const buttonDom = document.createElement('button');
+                        const currentMsgId = latestMsgId;
+                        buttonDom.classList.add('btn');
+                        buttonDom.innerHTML = escapeHtml(buttonObj.label);
+                        buttonDom.onclick = function(e) {
+                            proxySend(
+                                'callback',
+                                {
+                                    payload: buttonObj.payload,
+                                    msgId: currentMsgId
+                                }
+                            );
+                        }
+                        rowDom.append(buttonDom);
+                    }
+
+                    keyboardDom.append(rowDom);
+                }
+                keyboards.push(keyboardDom);
+                
+                break;
+
+            case 'image':
+                // Изображение
+
+                const imgDom = document.createElement('img');
+                imgDom.src = item.url;
+                images.push(imgDom);
+                
+                break;
+                
+            default:
+                break;
+        }
+    }
+
+    // Сначала изображения
+    for (imageIndex in images) {
+        msg.append(images[imageIndex]);
+    }
+
+    // Затем клавиатура
+    for (keyboardIndex in keyboards) {
+        msg.append(keyboards[keyboardIndex]);
+    }
 
     // DOM
     container.append(msg);
@@ -164,7 +229,12 @@ function processMessage(response) {
         let action = r[key];
 
         if (action.action == 'newMessage') {
-            addMessage(action.message.text, true, action.message.reply_to);
+            addMessage(
+                action.message.text,
+                true,
+                action.message.reply_to,
+                action.message.attachments
+            );
         } else if (action.action == 'errorMessage') {
             addError(
                 action.error.line,
@@ -200,7 +270,7 @@ function sendMessage() {
     proxySend("botKitMsg", {id: latestMsgId, text: msgText, userID: userID});
 
     // Отображение в UI
-    addMessage(msgText, false, -1);
+    addMessage(msgText, false, -1, []);
     msgInput.value = "";
 
 }

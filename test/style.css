@@ -16,33 +16,34 @@ body {
     bottom: 64px;
     width: 100%;
     overflow-y: scroll;
-    background: #28272c;
+    background: linear-gradient(to right, #8d336c, #e26037);
     background-size: cover;
 }
 
 /* Контейнер сообщения */
 .message-container {
     width: 100%;
-    padding: 0.5em 0;
+    padding: 0.25em 0;
 }
 .message-container:target {
-    background-color: #4D4B40;
+    background: repeating-linear-gradient(-60deg, white 0, white 1px, transparent 1px, transparent 5px);
 }
 .message-container a {
     /* Ссылки */
     font-weight: bold;
-    color: white;
+    color: #63abda;
     text-decoration: underline;
 }
 
 /* Карточки информации (встраиваются в контейнер сообщения) */
 .card {
     max-width: 800px;
-    background-color: #4B4B4B;
+    background-color: #5d5a55;
     border-radius: 5px;
-    border: 1px solid #FFFFFF;
+    border: 1px solid #7e7f7a;
     margin: 0 auto;
     padding: 0.5em;
+    color: #cecac7;
 }
 .card.error pre {
     /* Стек ошибки */
@@ -60,26 +61,45 @@ body {
 
 /* Сообщение от пользователя */
 .message {
-    min-width: 25%;
+    min-width: 32px;
     max-width: 50%;
-    background-color: #223C4B;
-    border-radius: 0 5px 5px 0;
+    background-color: #FFC180;
+    color: #5e4f39;
+    border-radius: 5px;
     padding: 0.5em;
-    border: 1px solid #00A2FF;
-    font-size: 12pt;
+    font-size: 11pt;
+    margin-right: 16px;
+    margin-left: auto;
 }
 .message.from-bot {
     /* Сообщение от бота */
-    margin-right: 0;
-    margin-left: auto;
-    border-radius: 5px 0px 0px 5px;
-    background-color: #4B3C22;
-    border-color: #FFA200;
+    background-color: #f4efef;
+    margin-left: 16px;
+    color: #5E5E5E;
 }
 .message-info {
     /* Метаданные сообщения */
-    font-size: 11pt;
+    font-size: 9pt;
     font-style: italic;
+    color: #40382D;
+}
+
+/* Клавиатуры */
+.inline-keyboard {
+    width: 100%;
+}
+.inline-keyboard-row {
+    width: 100%;
+    display: flex;
+}
+.inline-keyboard-row > button {
+    flex-grow: 1;
+}
+
+/* Изображения */
+.message > img {
+    width: 100%;
+    margin-top: 0.5em;
 }
 
 /* Элементы управления */
@@ -89,7 +109,7 @@ body {
     position: fixed;
     bottom: 0;
     border-top: 1px solid #808080;
-    background-color: #252525;
+    background-color: #423e3d;
     display: flex;
     align-items: center;
 }
@@ -132,18 +152,18 @@ body {
     padding: 0.5em;
     margin: 0.1em 0;
     width: 100%;
-    background-color: #333;
+    background-color: #423e3d;
     color: #ccc;
     outline: none;
     border-radius: 5px;
     font-size: 12pt;
-    border: 1px solid transparent;
+    border: 1px solid #7e7f7a;
     font-family: "Lato";
 }
 
 .inp:hover,
 .inp:focus {
-    border-color: #4d4d4d;
+    border-color: #7e7f7a;
 }
 
 .inp:focus {
@@ -153,12 +173,12 @@ body {
 /* Ошибка */
 .error {
     border-color: #FF000C;
-    background-color: #4B2224;
+    background-color: #c8474d;
 }
 /* Предупреждение */
 .warning {
     border-color: #FF8E00;
-    background-color: #4B3922;
+    background-color: #C87D47;
 }
 /* Успех */
 .success,
