@@ -7,6 +7,7 @@
 body {
     font-family: "Lato";
     color: #ccc;
+    background-color: #282828;
 }
 
 /* Список сообщений */
@@ -14,10 +15,14 @@ body {
     position: absolute;
     top: 0;
     bottom: 64px;
-    width: 100%;
+    width: 75%;
     overflow-y: scroll;
-    background: linear-gradient(to right, #8d336c, #e26037);
+    background: #282828;
     background-size: cover;
+    left: 0; 
+    right: 0; 
+    margin-left: auto; 
+    margin-right: auto; 
 }
 
 /* Контейнер сообщения */
@@ -26,21 +31,20 @@ body {
     padding: 0.25em 0;
 }
 .message-container:target {
-    background: repeating-linear-gradient(-60deg, white 0, white 1px, transparent 1px, transparent 5px);
+    background: repeating-linear-gradient(-60deg, #7c6f64 0, #7c6f64 1px, transparent 1px, transparent 5px);
 }
 .message-container a {
     /* Ссылки */
     font-weight: bold;
-    color: #63abda;
     text-decoration: underline;
 }
 
 /* Карточки информации (встраиваются в контейнер сообщения) */
 .card {
     max-width: 800px;
-    background-color: #5d5a55;
+    background-color: #3c3836;
     border-radius: 5px;
-    border: 1px solid #7e7f7a;
+    border: 1px solid #504945;
     margin: 0 auto;
     padding: 0.5em;
     color: #cecac7;
@@ -61,27 +65,31 @@ body {
 
 /* Сообщение от пользователя */
 .message {
-    min-width: 32px;
+    min-width: 64px;
     max-width: 50%;
-    background-color: #FFC180;
-    color: #5e4f39;
+    background-color: #b16286;
+    color: #ebdbb2;
     border-radius: 5px;
     padding: 0.5em;
     font-size: 11pt;
     margin-right: 16px;
     margin-left: auto;
+    word-wrap: break-word;
+    width: max-content;
 }
 .message.from-bot {
     /* Сообщение от бота */
-    background-color: #f4efef;
+    background-color: #689d6a;
     margin-left: 16px;
-    color: #5E5E5E;
 }
 .message-info {
     /* Метаданные сообщения */
     font-size: 9pt;
     font-style: italic;
-    color: #40382D;
+    color: #282828;
+}
+.message-info > a {
+    color: #282828;
 }
 
 /* Клавиатуры */
