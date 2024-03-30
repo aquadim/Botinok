@@ -1,13 +1,40 @@
+/* Палитра отсюда: https://lospec.com/palette-list/endesga-64 */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+:root {
+    --background: #272727;
+    --foreground: #ffffff;
+    --cardBackground: #3d3d3d;
+    --cardBorder: #5d5d5d;
+
+    --success: #33984b; 
+    --successBorder: #5ac54f;
+    --successFg: #ffffff;
+    --successHover: #5ac54f;
+    
+    --error: #ea323c; 
+    --errorBorder: #c42430;
+    --errorFg: #ffffff;
+    --errorHover: #ea323c;
+    
+    --warn: #ed7614; 
+    --warnBorder: #ffa214 ;
+
+    --myMsg: #33984b ;
+    --botMsg: #db3ffd;
+    --metaInfo: #272727;
+    --msgHightlight: #5d5d5d;
+}
+
 body {
     font-family: "Lato";
     color: #ccc;
-    background-color: #282828;
+    background-color: var(--background);
 }
 
 /* Список сообщений */
@@ -17,12 +44,28 @@ body {
     bottom: 64px;
     width: 75%;
     overflow-y: scroll;
-    background: #282828;
-    background-size: cover;
     left: 0; 
     right: 0; 
     margin-left: auto; 
     margin-right: auto; 
+}
+
+/* Поле ввода сообщения */
+#userMessage {
+    padding: 0.5em;
+    margin: 0.1em 0;
+    width: 100%;
+    background-color:  var(--cardBackground);
+    border: 2px solid var(--cardBorder);
+    color: var(--foreground);
+    outline: none;
+    border-radius: 5px;
+    font-size: 12pt;
+    font-family: "Lato";
+}
+
+#userMessage:focus {
+    border-color: var(--success) ;
 }
 
 /* Контейнер сообщения */
@@ -31,23 +74,18 @@ body {
     padding: 0.25em 0;
 }
 .message-container:target {
-    background: repeating-linear-gradient(-60deg, #7c6f64 0, #7c6f64 1px, transparent 1px, transparent 5px);
-}
-.message-container a {
-    /* Ссылки */
-    font-weight: bold;
-    text-decoration: underline;
+    background: repeating-linear-gradient(-60deg, var(--msgHightlight) 0, var(--msgHightlight) 1px, transparent 1px, transparent 5px);
 }
 
 /* Карточки информации (встраиваются в контейнер сообщения) */
 .card {
     max-width: 800px;
-    background-color: #3c3836;
+    background-color: var(--cardBackground);
     border-radius: 5px;
-    border: 1px solid #504945;
+    border: 2px solid var(--cardBorder);
     margin: 0 auto;
     padding: 0.5em;
-    color: #cecac7;
+    color: var(--foreground);
 }
 .card.error pre {
     /* Стек ошибки */
@@ -65,10 +103,10 @@ body {
 
 /* Сообщение от пользователя */
 .message {
-    min-width: 64px;
+    min-width: 25%;
     max-width: 50%;
-    background-color: #b16286;
-    color: #ebdbb2;
+    background-color: var(--myMsg);
+    color: var(--foreground);
     border-radius: 5px;
     padding: 0.5em;
     font-size: 11pt;
@@ -79,17 +117,17 @@ body {
 }
 .message.from-bot {
     /* Сообщение от бота */
-    background-color: #689d6a;
+    background-color: var(--botMsg);
     margin-left: 16px;
 }
 .message-info {
     /* Метаданные сообщения */
-    font-size: 9pt;
+    font-size: 10pt;
     font-style: italic;
-    color: #282828;
+    color: var(--metaInfo);
 }
 .message-info > a {
-    color: #282828;
+    color: #131313 ;
 }
 
 /* Клавиатуры */
@@ -116,8 +154,8 @@ body {
     height: 64px;
     position: fixed;
     bottom: 0;
-    border-top: 1px solid #808080;
-    background-color: #423e3d;
+    border-top: 1px solid var(--cardBorder);
+    background-color: var(--cardBackground);
     display: flex;
     align-items: center;
 }
@@ -133,7 +171,7 @@ body {
 /* Кнопки */
 .btn {
     background-color: #333;
-    border: 1px solid #404040;
+    border: 2px solid #404040;
     padding: 0.5em;
     color: #ccc;
     font-size: 1rem;
@@ -155,45 +193,45 @@ body {
     background-color: #252525;
 }
 
-/* Поле ввода */
-.inp {
-    padding: 0.5em;
-    margin: 0.1em 0;
-    width: 100%;
-    background-color: #423e3d;
-    color: #ccc;
-    outline: none;
-    border-radius: 5px;
-    font-size: 12pt;
-    border: 1px solid #7e7f7a;
-    font-family: "Lato";
-}
-
-.inp:hover,
-.inp:focus {
-    border-color: #7e7f7a;
-}
 
 .inp:focus {
     color: #ddd;
 }
 
+/* Ссылки в карточках */
+.card a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 /* Ошибка */
 .error {
-    border-color: #FF000C;
-    background-color: #c8474d;
+    border-color: var(--errorBorder);
+    background-color: var(--error);
 }
+.card.error a {
+    /* Ссылки в карточках ошибки */
+    color: #571c27;
+}
+
 /* Предупреждение */
 .warning {
-    border-color: #FF8E00;
-    background-color: #C87D47;
+    border-color: var(--warnBorder);
+    background-color: var(--warn);
 }
+.card.warning a {
+    /* Ссылки в карточках предупреждений */
+    color: #8e251d  ;
+}
+
 /* Успех */
 .success,
 .success:focus {
-    border-color: #00FF0C;
-    background-color: #224B24;
+    border-color: var(--successBorder);
+    background-color: var(--success);
+    color: var(--successFg);
+    border-width: 2;
 }
 .success:hover {
-    background-color: #366339;
+    background-color: var(--success);
 }
