@@ -48,8 +48,8 @@ server.on('connection', function(conn) {
             // BotKit ничего не вернул -- наверняка из-за ошибки парсинга
             const errorMsg = [{
                 action: 'info',
-                title: 'Произошла неизвестная ошибка',
-                body: 'Проверьте корректность синтаксиса в BotKit и убедитесь в его работоспособности'
+                title: 'Пустой ответ',
+                body: 'BotKit выдал пустой ответ для запроса'
             }];
             conn.send(JSON.stringify(errorMsg));
             return;
