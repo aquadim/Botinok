@@ -19,10 +19,28 @@ function getContainer(withID=false) {
     return container;
 }
 
+// Функция удаления карточки
+function closeButtonCallback(e) {
+    this.closest('.message-container').remove();
+}
+
 // Создание карточки
 function getCard() {
     const card = document.createElement("div");
     card.classList.add('card');
+    card.onclick = function (e) {
+        if (e && (e.which == 2 || e.button == 4 )) {
+            closeButtonCallback();
+        }
+    }
+
+    const closeButton = document.createElement("a");
+    closeButton.href = "#";
+    closeButton.innerHTML = "&times;";
+    closeButton.classList.add('close-button');
+    closeButton.onclick = closeButtonCallback;
+    card.append(closeButton);
+
     return card;
 }
 
@@ -61,11 +79,15 @@ function addInfo(title, text, bodyElement = 'p') {
     scrollToNew();
 }
 
-// Добавление сообщения
-function addMessage(text, fromBot, replyTo, attachments) {
-    const container = getContainer(true);
-    
-    // Создание сообщения
+// Возвращает DOM объект сообщения
+function getMessageObject(
+    text,
+    fromBot,
+    replyTo,
+    attachments,
+    msgId,
+    edited) {
+
     const msg = document.createElement("div");
     msg.classList.add('message');
     if (fromBot) {
@@ -73,9 +95,16 @@ function addMessage(text, fromBot, replyTo, attachments) {
     }
 
     // id сообщения
-    let p = getParagraph("#"+latestMsgId);
+    let p = getParagraph("#"+msgId);
     p.classList.add("message-info");
     msg.append(p);
+
+    // Пометка "Изменено"
+    if (edited) {
+        p = getParagraph("Изменено");
+        p.classList.add("message-info");
+        msg.append(p);
+    }
 
     // Ответ на сообщение
     if (replyTo != -1) {
@@ -122,14 +151,15 @@ function addMessage(text, fromBot, replyTo, attachments) {
                             proxySend(
                                 'callback',
                                 {
-                                    payload: buttonObj.payload,
-                                    msgId: currentMsgId
+                                    params: buttonObj.payload,
+                                    msgId: currentMsgId,
+                                    userId: userID,
+                                    callbackType: buttonObj.callbackType
                                 }
                             );
                         }
                         rowDom.append(buttonDom);
                     }
-
                     keyboardDom.append(rowDom);
                 }
                 keyboards.push(keyboardDom);
@@ -160,12 +190,43 @@ function addMessage(text, fromBot, replyTo, attachments) {
         msg.append(keyboards[keyboardIndex]);
     }
 
+    return msg;
+}
+
+// Добавление сообщения
+function addMessage(text, fromBot, replyTo, attachments) {
+    const container = getContainer(true);
+    
+    // Создание сообщения
+    const msg = getMessageObject(
+        text,
+        fromBot,
+        replyTo,
+        attachments,
+        latestMsgId,
+        false
+    );
+    
     // DOM
     container.append(msg);
     msgList.append(container);
     scrollToNew();
 
     latestMsgId++;
+}
+
+// Изменение сообщения
+function editMessage(text, attachments, msgId) {
+    const msg = getMessageObject(
+        text,
+        true,
+        -1,
+        attachments,
+        msgId,
+        true
+    );
+    const container = document.getElementById('msg' + msgId);
+    container.replaceChild(msg, container.firstElementChild);
 }
 
 // Прокрутка до последнего сообщения
@@ -255,6 +316,13 @@ function processMessage(response) {
             addInfo("Содержимое для "+action.title, action.info, 'pre');
         } else if (action.action == 'info') {
             addInfo(action.title, action.body, 'p');
+        } else if (action.action == 'editMessage') {
+            // Изменение сообщения
+            editMessage(
+                action.newMessage.text,
+                action.newMessage.attachments,
+                action.messageId
+            )
         } else {
             addInfo("Получено неизвестное действие", action.action, 'p');
         }

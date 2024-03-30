@@ -26,6 +26,7 @@ server.on('connection', function(conn) {
         // Но если это запрос на открытие Geany, выполнить его, а не перенаправить
         const data = msg.toString();
         const jsonData = JSON.parse(data);
+        
         if (jsonData.action == "geany") {
             spawn(
                 "geany",
