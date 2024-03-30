@@ -134,12 +134,12 @@ function getMessageObject(
                 // Встраиваемая клавиатура
 
                 const keyboardDom = document.createElement('div');
-                keyboardDom.classList.add('inline-keyboard');
+                keyboardDom.classList.add('keyboard');
 
                 for (let rowIndex in item.layout) {
                     const rowObj = item.layout[rowIndex];
                     const rowDom = document.createElement("div");
-                    rowDom.classList.add('inline-keyboard-row');
+                    rowDom.classList.add('keyboard-row');
                     
                     for (let buttonIndex in rowObj) {
                         const buttonObj = rowObj[buttonIndex];
@@ -330,9 +330,8 @@ function processMessage(response) {
 }
 
 // Отправка сообщения
-function sendMessage() {
+function sendMessage(msgText) {
     // Составление объекта исходящено сообщения
-    const msgText = msgInput.value;
 
     // Отправка в прокси
     proxySend("botKitMsg", {id: latestMsgId, text: msgText, userID: userID});
@@ -378,9 +377,19 @@ ws.onmessage = function(e) {
     processMessage(e.data);
 }
 
-sendMsgBtn.onclick = sendMessage;
+sendMsgBtn.onclick = function(e) {
+    sendMessage(msgInput.value);
+};
 msgInput.onkeyup = function(e) {
     if (event.key === "Enter") {
-        sendMessage();
+        sendMessage(this.value);
     }
 }
+
+// Нажатия на клавиатуру
+document.addEventListener("click", function(e) {
+    const element = e.target;
+    if (element.tagName.toUpperCase() == 'BUTTON' && element.classList.contains("under-keyboard")) {
+        sendMessage(element.innerHTML);
+    }
+});

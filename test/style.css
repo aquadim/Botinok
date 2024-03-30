@@ -39,13 +39,8 @@ body {
 
 /* Список сообщений */
 #msgList {
-    position: absolute;
-    top: 0;
-    bottom: 64px;
     width: 75%;
     overflow-y: scroll;
-    left: 0; 
-    right: 0; 
     margin-left: auto; 
     margin-right: auto; 
 }
@@ -62,6 +57,7 @@ body {
     border-radius: 5px;
     font-size: 12pt;
     font-family: "Lato";
+    height: 100%;
 }
 
 #userMessage:focus {
@@ -138,14 +134,14 @@ body {
 }
 
 /* Клавиатуры */
-.inline-keyboard {
+.keyboard {
     width: 100%;
 }
-.inline-keyboard-row {
+.keyboard-row {
     width: 100%;
     display: flex;
 }
-.inline-keyboard-row > button {
+.keyboard-row > button {
     flex-grow: 1;
 }
 
@@ -158,21 +154,33 @@ body {
 /* Элементы управления */
 #msgControls {
     width: 100%;
-    height: 64px;
-    position: fixed;
+    min-height: 64px;
+    height: max-content;
     bottom: 0;
     border-top: 1px solid var(--cardBorder);
     background-color: var(--cardBackground);
     display: flex;
     align-items: center;
+    flex-flow: column;
+    padding: 0 1em;
 }
 #messageBox {
     display: grid;
     grid-template-columns: 80% auto;
     grid-gap: 1em;
-    padding: 0 1em;
     padding-top: 0.5em;
     width: 100%;
+}
+#keyboard {
+    padding-top: 0.5em;
+    width: 100%;
+}
+
+#wrapper {
+    display: grid;
+    grid-template-rows: 1fr max-content;
+    grid-template-columns: auto;
+    height: 100vh;
 }
 
 /* Кнопки */
@@ -186,7 +194,6 @@ body {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    margin: 0.1em;
     font-size: 12pt;
     cursor: pointer;
     font-family: "Lato";
@@ -198,11 +205,6 @@ body {
 .btn:focus,
 .btn.selected {
     background-color: #252525;
-}
-
-
-.inp:focus {
-    color: #ddd;
 }
 
 /* Ссылки в карточках */
@@ -228,7 +230,7 @@ body {
 }
 .card.warning a {
     /* Ссылки в карточках предупреждений */
-    color: #8e251d  ;
+    color: #8e251d;
 }
 
 /* Успех */
@@ -237,7 +239,6 @@ body {
     border-color: var(--successBorder);
     background-color: var(--success);
     color: var(--successFg);
-    border-width: 2;
 }
 .success:hover {
     background-color: var(--success);
