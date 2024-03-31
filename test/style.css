@@ -48,7 +48,6 @@ body {
 /* Поле ввода сообщения */
 #userMessage {
     padding: 0.5em;
-    margin: 0.1em 0;
     width: 100%;
     background-color:  var(--cardBackground);
     border: 2px solid var(--cardBorder);
@@ -62,6 +61,10 @@ body {
 
 #userMessage:focus {
     border-color: var(--success) ;
+}
+
+#keyboardHide {
+    display: none;
 }
 
 /* Контейнер сообщения */
@@ -144,6 +147,10 @@ body {
 .keyboard-row > button {
     flex-grow: 1;
 }
+#plainkeyboard {
+    padding-top: 0.5em;
+    display: none;
+}
 
 /* Изображения */
 .message > img {
@@ -166,16 +173,18 @@ body {
 }
 #messageBox {
     display: grid;
-    grid-template-columns: 80% auto;
+    grid-template-columns: 42px 80% auto;
+    grid-template-rows: 42px;
     grid-gap: 1em;
     padding-top: 0.5em;
     width: 100%;
 }
-#keyboard {
-    padding-top: 0.5em;
-    width: 100%;
+#toggleKeyboard {
+    display: flex;
 }
-
+.icon path {
+    fill: var(--foreground);
+}
 #wrapper {
     display: grid;
     grid-template-rows: 1fr max-content;

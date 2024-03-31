@@ -358,6 +358,11 @@ function openGeany(file, line) {
 const msgInput = document.getElementById("userMessage");
 const msgList = document.getElementById("msgList");
 const sendMsgBtn = document.getElementById("sendMessage");
+const toggleKeyboardBtn = document.getElementById("toggleKeyboard");
+const keyboard = document.getElementById("plainkeyboard");
+const keyboardShow = document.getElementById("keyboardShow");
+const keyboardHide = document.getElementById("keyboardHide");
+let keyboardVisible = false;
 
 // ID последнего сообщения в чате
 let latestMsgId = 0;
@@ -389,7 +394,24 @@ msgInput.onkeyup = function(e) {
 // Нажатия на клавиатуру
 document.addEventListener("click", function(e) {
     const element = e.target;
-    if (element.tagName.toUpperCase() == 'BUTTON' && element.classList.contains("under-keyboard")) {
-        sendMessage(element.innerHTML);
+    if (element.tagName.toUpperCase() == 'BUTTON') {
+
+        if (element.classList.contains("under-keyboard")) {
+            sendMessage(element.innerHTML);
+        }
     }
 });
+
+// Нажатия на кнопку раскрытия/закрытия клавиатуры
+toggleKeyboardBtn.onclick = function(e) {
+    if (keyboardVisible) {
+        keyboard.style.display = 'none';
+        keyboardHide.style.display = 'none';
+        keyboardShow.style.display = 'block';
+    } else {
+        keyboard.style.display = 'block';
+        keyboardHide.style.display = 'block';
+        keyboardShow.style.display = 'none';
+    }
+    keyboardVisible = !keyboardVisible;
+}
