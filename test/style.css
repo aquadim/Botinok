@@ -145,7 +145,7 @@ body {
     display: flex;
 }
 .keyboard-row > button {
-    flex-grow: 1;
+    flex: 1;
 }
 #plainkeyboard {
     padding-top: 0.5em;

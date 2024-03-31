@@ -79,6 +79,32 @@ function addInfo(title, text, bodyElement = 'p') {
     scrollToNew();
 }
 
+// Возвращает DOM объект клавиатуры
+function getKeyboardObject(layout, buttonCallback) {
+    const keyboardDom = document.createElement('div');
+    keyboardDom.classList.add('keyboard');
+
+    for (let rowIndex in layout) {
+        const rowObj = layout[rowIndex];
+        const rowDom = document.createElement("div");
+        rowDom.classList.add('keyboard-row');
+        
+        for (let buttonIndex in rowObj) {
+            const buttonObj = rowObj[buttonIndex];
+            const buttonDom = document.createElement('button');
+            const currentMsgId = latestMsgId;
+            buttonDom.classList.add('btn');
+            buttonDom.innerHTML = escapeHtml(buttonObj.label);
+            buttonDom.onclick = function(e) {
+                buttonCallback(buttonObj, currentMsgId);
+            }
+            rowDom.append(buttonDom);
+        }
+        keyboardDom.append(rowDom);
+    }
+    return keyboardDom;
+}
+
 // Возвращает DOM объект сообщения
 function getMessageObject(
     text,
@@ -120,8 +146,12 @@ function getMessageObject(
     }
 
     // Текст
-    const textParagraph = getParagraph(text);
-    msg.append(textParagraph);
+    const lines = text.split('\n');
+    let textParagraph;
+    for (index in lines) {
+        textParagraph = getParagraph(lines[index]);
+        msg.append(textParagraph);
+    }
 
     // Вложения
     const keyboards = [];
@@ -132,48 +162,53 @@ function getMessageObject(
         switch (item.type) {
             case 'inlineKeyboard':
                 // Встраиваемая клавиатура
-
-                const keyboardDom = document.createElement('div');
-                keyboardDom.classList.add('keyboard');
-
-                for (let rowIndex in item.layout) {
-                    const rowObj = item.layout[rowIndex];
-                    const rowDom = document.createElement("div");
-                    rowDom.classList.add('keyboard-row');
-                    
-                    for (let buttonIndex in rowObj) {
-                        const buttonObj = rowObj[buttonIndex];
-                        const buttonDom = document.createElement('button');
-                        const currentMsgId = latestMsgId;
-                        buttonDom.classList.add('btn');
-                        buttonDom.innerHTML = escapeHtml(buttonObj.label);
-                        buttonDom.onclick = function(e) {
-                            proxySend(
-                                'callback',
-                                {
-                                    params: buttonObj.payload,
-                                    msgId: currentMsgId,
-                                    userId: userID,
-                                    callbackType: buttonObj.callbackType
-                                }
-                            );
-                        }
-                        rowDom.append(buttonDom);
+                // При нажатии на кнопку из этой клавиатуры будет отсылаться
+                // событие обратного вызова с параметрами кнопки
+                const keyboardDom = getKeyboardObject(
+                    item.layout,
+                    function(buttonObj, currentMsgId) {
+                        proxySend(
+                            'callback',
+                            {
+                                params: buttonObj.payload,
+                                msgId: currentMsgId,
+                                userId: userID,
+                                callbackType: buttonObj.callbackType
+                            }
+                        );
                     }
-                    keyboardDom.append(rowDom);
-                }
+                );
                 keyboards.push(keyboardDom);
-                
                 break;
 
             case 'image':
                 // Изображение
-
                 const imgDom = document.createElement('img');
                 imgDom.src = item.url;
                 images.push(imgDom);
-                
                 break;
+
+            case 'keyboard':
+                // Обычная клавиатура
+
+                // 1. Убрать прошлую клавиатуру
+                plainkeyboard.innerHTML = "";
+
+                // 2. Создать новую
+                // При нажатии на любую кнопку клавиатуры будет отсылаться
+                // сообщение с текстом, взятым из текста кнопки
+                const keyboardDomPlain = getKeyboardObject(
+                    item.layout,
+                    function(buttonObj, currentMsgId) {
+                        sendMessage(buttonObj.label);
+                    }
+                );
+
+                // 3. Добавить клавиатуру
+                plainkeyboard.append(keyboardDomPlain);
+
+                // 4. Раскрыть
+                openKeyboard();
                 
             default:
                 break;
@@ -350,9 +385,23 @@ function openGeany(file, line) {
         file: file,
         line: line
     }
-
     // Отправка в прокси
     ws.send(JSON.stringify(dataObject));
+}
+
+// Закрывает клавиатуру
+function closeKeyboard() {
+    keyboard.style.display = 'none';
+    keyboardHide.style.display = 'none';
+    keyboardShow.style.display = 'block';
+    keyboardVisible = false;
+}
+// Открывает клавиатуру
+function openKeyboard() {
+    keyboard.style.display = 'block';
+    keyboardHide.style.display = 'block';
+    keyboardShow.style.display = 'none';
+    keyboardVisible = true;
 }
 
 const msgInput = document.getElementById("userMessage");
@@ -405,13 +454,8 @@ document.addEventListener("click", function(e) {
 // Нажатия на кнопку раскрытия/закрытия клавиатуры
 toggleKeyboardBtn.onclick = function(e) {
     if (keyboardVisible) {
-        keyboard.style.display = 'none';
-        keyboardHide.style.display = 'none';
-        keyboardShow.style.display = 'block';
+        closeKeyboard();
     } else {
-        keyboard.style.display = 'block';
-        keyboardHide.style.display = 'block';
-        keyboardShow.style.display = 'none';
+        openKeyboard();
     }
-    keyboardVisible = !keyboardVisible;
 }
