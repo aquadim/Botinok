@@ -358,6 +358,16 @@ function processMessage(response) {
                 action.newMessage.attachments,
                 action.messageId
             )
+        } else if (action.action == 'statesResponse') {
+            // Обновление доступных состояний
+            setStateSelect.innerHTML = "";
+            let option;
+            for (state in action.states) {
+                option = document.createElement("option");
+                option.label = state;
+                option.value = action.states[state];
+                setStateSelect.append(option);
+            }
         } else {
             addInfo("Получено неизвестное действие", action.action, 'p');
         }
@@ -411,6 +421,8 @@ const toggleKeyboardBtn = document.getElementById("toggleKeyboard");
 const keyboard = document.getElementById("plainkeyboard");
 const keyboardShow = document.getElementById("keyboardShow");
 const keyboardHide = document.getElementById("keyboardHide");
+const setStateSelect = document.getElementById("setStateSelect");
+const updateStates = document.getElementById("updateStates");
 let keyboardVisible = false;
 
 // ID последнего сообщения в чате
@@ -458,4 +470,13 @@ toggleKeyboardBtn.onclick = function(e) {
     } else {
         openKeyboard();
     }
+}
+
+// Установка доступных значений состояний
+updateStates.onclick = function() {
+    proxySend("statesRequest", {});
+}
+
+setStateSelect.onchange = function(e) {
+    proxySend("stateSet", { stateID: e.target.value, userID: userID });
 }

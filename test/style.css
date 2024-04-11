@@ -23,7 +23,7 @@
     --errorHover: #ea323c;
     
     --warn: #ed7614; 
-    --warnBorder: #ffa214 ;
+    --warnBorder: #ffa214;
 
     --myMsg: #33984b ;
     --botMsg: #db3ffd;
@@ -186,11 +186,19 @@ body {
 .icon path {
     fill: var(--foreground);
 }
+
 #wrapper {
     display: grid;
     grid-template-rows: 1fr max-content;
-    grid-template-columns: auto;
+    grid-template-columns: 256px auto;
     height: 100vh;
+}
+#sidebar {
+    padding: 0.5em;
+    background: #1f1f1f;
+}
+#msgControls {
+    grid-column: span 2;
 }
 
 /* Кнопки */
@@ -253,3 +261,38 @@ body {
 .success:hover {
     background-color: var(--success);
 }
+
+/* --Forms-- */
+.form-control-container {
+	margin: 0.5em auto;
+	position: relative;
+	display: flex;
+	flex-flow: column;
+}
+
+.form-control-container label {
+	color: var(--foreground)
+}
+
+.form-control {
+	padding: 0.5em;
+	margin: 0.1em 0;
+	width: 1fr;
+	background-color: var(--cardBackground);
+	color: var(--foreground);
+	outline: none;
+	border-radius: 5px;
+	font-size: 16px;
+	border: 1px solid transparent;
+}
+
+.form-control:hover,
+.form-control:focus {
+	border-color: var(--cardBorder);
+}
+
+.form-control:focus {
+	color: #fff;
+}
+
+/* End Forms */
