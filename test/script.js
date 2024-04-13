@@ -96,7 +96,7 @@ function getKeyboardObject(layout, buttonCallback) {
             buttonDom.classList.add('btn');
             buttonDom.innerHTML = escapeHtml(buttonObj.label);
             buttonDom.onclick = function(e) {
-                buttonCallback(buttonObj, currentMsgId);
+                buttonCallback(buttonObj);
             }
             rowDom.append(buttonDom);
         }
@@ -166,12 +166,12 @@ function getMessageObject(
                 // событие обратного вызова с параметрами кнопки
                 const keyboardDom = getKeyboardObject(
                     item.layout,
-                    function(buttonObj, currentMsgId) {
+                    function(buttonObj) {
                         proxySend(
                             'callback',
                             {
                                 params: buttonObj.payload,
-                                msgId: currentMsgId,
+                                msgId: msgId,
                                 userId: userID,
                                 callbackType: buttonObj.callbackType
                             }
@@ -199,7 +199,7 @@ function getMessageObject(
                 // сообщение с текстом, взятым из текста кнопки
                 const keyboardDomPlain = getKeyboardObject(
                     item.layout,
-                    function(buttonObj, currentMsgId) {
+                    function(buttonObj) {
                         sendMessage(buttonObj.label);
                     }
                 );
